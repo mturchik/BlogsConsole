@@ -34,7 +34,7 @@ namespace BlogsConsole
                         case "1":
                             // Display all Blogs from the database
                             var query = db.Blogs.OrderBy(b => b.Name);
-                            Console.WriteLine("All blogs in the database:");
+                            Console.WriteLine("Blogs in database: " + db.Blogs.Count());
                             i = 1;
                             foreach (var item in query)
                             {
@@ -45,7 +45,7 @@ namespace BlogsConsole
                             // Create and save a new Blog
                             Console.Write("Enter a name for the new Blog:\n" +
                                 "===");
-                            var name = Console.ReadLine();
+                            var name = Validate.ValidateBlank(Console.ReadLine());
                             db.AddBlog(new Blog { Name = name });
                             logger.Info("Blog added - {name}", name);
                             break;

@@ -20,6 +20,6 @@ namespace BlogsConsole.Models
             this.Posts.Add(post);
             this.SaveChanges();
         }
-
+        
     }
 }
