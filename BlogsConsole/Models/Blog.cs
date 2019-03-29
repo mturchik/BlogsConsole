@@ -8,5 +8,10 @@ namespace BlogsConsole.Models
         public string Name { get; set; }
 
         public List<Post> Posts { get; set; }
+
+        override public string ToString()
+        {
+            return this.Name;
+        }
     }
 }

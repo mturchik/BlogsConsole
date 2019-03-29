@@ -4,6 +4,7 @@ using System;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace BlogsConsole
 {
@@ -16,39 +17,40 @@ namespace BlogsConsole
             try
             {
                 bool cont = true;
+                int i;
                 while (cont)
                 {
                     var db = new BloggingContext();
-                    Console.Write("Welcome to the Blog/Console~\n" +
-                                  "1. Display all Blogs\n" +
-                                  "2. Add Blog\n" +
-                                  "3. Create Post\n" +
-                                  "4. Exit\n" +
+                    Console.Write("Welcome to the Blog/Console:\n" +
+                                  "=1 Display all Blogs\n" +
+                                  "=2 Create Blog\n" +
+                                  "=3 Create Post\n" +
+                                  "=4 Display Posts\n" +
+                                  "=5 Exit\n" +
                                   "===");
                     string input = Console.ReadLine();
-                    switch (Validate.ValidateMenuSelection(input, 4))
+                    switch (Validate.ValidateMenuSelection(input, 5))
                     {
                         case "1":
                             // Display all Blogs from the database
                             var query = db.Blogs.OrderBy(b => b.Name);
                             Console.WriteLine("All blogs in the database:");
+                            i = 1;
                             foreach (var item in query)
                             {
-                                Console.WriteLine(item.Name);
+                                Console.WriteLine(i++ + ") " + item);
                             }
                             break;
                         case "2":
                             // Create and save a new Blog
-                            Console.Write("Enter a name for a new Blog: ");
+                            Console.Write("Enter a name for the new Blog:\n" +
+                                "===");
                             var name = Console.ReadLine();
-
-                            var blog = new Blog { Name = name };
-                            
-                            db.AddBlog(blog);
+                            db.AddBlog(new Blog { Name = name });
                             logger.Info("Blog added - {name}", name);
                             break;
                         case "3":
-                            var listBlogs = db.Blogs.OrderBy(b => b.BlogId);
+                            var listBlogs = db.Blogs.OrderBy(b => b.Name);
                             Console.WriteLine("All blogs in the database:");
                             foreach (var item in listBlogs)
                             {
@@ -72,6 +74,8 @@ namespace BlogsConsole
                             logger.Info("Post added - {name}", post.PostId);
                             break;
                         case "4":
+                            break;
+                        case "5":
                             cont = false;
                             break;
                     }
