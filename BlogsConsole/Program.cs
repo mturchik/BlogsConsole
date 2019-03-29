@@ -50,25 +50,43 @@ namespace BlogsConsole
                             logger.Info("Blog added - {name}", name);
                             break;
                         case "3":
+                            //Query Blogs and sort by name
                             var listBlogs = db.Blogs.OrderBy(b => b.Name);
+                            //Make list of custom menu sorting objects
+                            List<MenuBlogId> menuBlogIds = new List<MenuBlogId>();
+                            i = 1;
                             Console.WriteLine("All blogs in the database:");
                             foreach (var item in listBlogs)
                             {
-                                Console.WriteLine("BlogId: " + item.BlogId + " - BlogName: " + item.Name);
+                                //create menu sorting object with index value i, and corresponding blogId
+                                menuBlogIds.Add(new MenuBlogId { menuId = i, blogId = item.BlogId });
+                                //Display index value and Blog name
+                                Console.WriteLine(i++ + ") " + item.Name);
                             }
                             Console.Write("Enter the BlogId of the Blog to post to:\n" +
-                                          "=");
-                            input = Console.ReadLine();
+                                          "===");
+                            input = Validate.ValidateMenuSelection(Console.ReadLine(), i);
                             var intInput = int.Parse(input);
-
-                            Blog chosenBlog = db.Blogs.Find(intInput);
+                            //Get element at specific index from the custom list, 
+                            //and find the blog in the UNSORTED db with the blog ID that matches
+                            int mBlogId = 0;
+                            foreach(MenuBlogId m in menuBlogIds)
+                            {
+                                if(m.menuId == intInput)
+                                {
+                                    mBlogId = m.blogId;
+                                }
+                            }
+                            Blog chosenBlog = db.Blogs.Find(mBlogId);
 
                             Console.Write("Enter post title:\n" +
                                               "=");
                             var title = Validate.ValidateBlank(Console.ReadLine());
+                            logger.Info("Title chosen - {title}", title);
                             Console.Write("Enter post content:\n" +
                                           "=");
                             var content = Validate.ValidateBlank(Console.ReadLine());
+                            logger.Info("Content chosen - {content}", content);
                             var post = new Post() { Title = title, Content = content, BlogId = chosenBlog.BlogId , Blog = chosenBlog };
                             db.AddPost(post);
                             logger.Info("Post added - {name}", post.PostId);
