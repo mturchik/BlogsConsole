@@ -8,5 +8,12 @@
 
         public int BlogId { get; set; }
         public Blog Blog { get; set; }
+
+        override public string ToString()
+        {
+            return "Blog: " + Blog.Name + "\n" +
+                "Title: " + Title + "\n" +
+                "Content: " + Content;
+        }
     }
 }

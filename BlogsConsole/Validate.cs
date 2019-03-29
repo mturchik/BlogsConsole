@@ -9,42 +9,32 @@ namespace BlogsConsole
 
         //Loops asking for input until valid input is given, then returns as a string
         //Ex. MainMenu of 5 items, if user enters 1,2,3,4 or 5 it is valid input
-        public static string ValidateMenuSelection(string s, int n)
+        public static string ValidateMenuSelection(string s, int start, int end)
         {
             bool invalid = true;
             while (invalid)
             {
                 if (s.Length > 0)
                 {
-                    if (s.Length == 1)
+                    if (int.TryParse(s, out var sel))
                     {
-                        if (int.TryParse(s.Substring(0, 1), out var sel))
+                        if (sel <= end && sel >= start)
                         {
-                            if (sel <= n && sel >= 1)
-                            {
-                                invalid = false;
-                            }
-                            else
-                            {
-                                logger.Warn("Selection out of bounds.");
-                                Console.Write("Selection out of bounds.\n" +
-                                              "===");
-                                s = Console.ReadLine();
-                            }
+                            invalid = false;
                         }
                         else
                         {
-                            logger.Warn("Input includes non-numbers.");
-                            Console.Write("Input includes non-numbers.\n" +
-                                          "===");
+                            logger.Warn("Selection out of bounds.");
+                            Console.Write("Selection out of bounds.\n" +
+                                            "===");
                             s = Console.ReadLine();
                         }
                     }
                     else
                     {
-                        logger.Warn("Single digit input required.");
-                        Console.Write("Single digit input required.\n" +
-                                      "===");
+                        logger.Warn("Input includes non-numbers.");
+                        Console.Write("Input includes non-numbers.\n" +
+                                        "===");
                         s = Console.ReadLine();
                     }
                 }
